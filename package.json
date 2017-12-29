@@ -1,0 +1,19 @@
+{
+  "name": "coinkeeper_elasticsearch_loader",
+  "version": "1.0.0",
+  "description": "project to read csv files from coinkeeper and load them into an ES instance",
+  "main": "coinkeeper_es_loader_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gcarreto/coinkeeper_elasticsearch_loader.git"
+  },
+  "author": "Giovanni Carreto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gcarreto/coinkeeper_elasticsearch_loader/issues"
+  },
+  "homepage": "https://github.com/gcarreto/coinkeeper_elasticsearch_loader#readme"
+}
