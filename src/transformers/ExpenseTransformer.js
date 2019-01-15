@@ -12,10 +12,14 @@ class ExpenseTransformer {
             case 'Entertainment Ens':
                 expense = this.genericParse(expense, 'withWho', this.parseNoteEnterntaimentEns);        
                 break;
-            case 'Travel':
-            case 'Hotel': 
-            case 'Comer en viaje':             
             case 'Ajedrez inscripciones':
+                expense = this.genericParse(expense, 'travelName', this.parseUber);        
+                break;
+            case 'Comer en viaje':
+                expense = this.genericParse(expense, 'withWho', this.parseNoteComerEnViaje);        
+                break;
+            case 'Travel':
+            case 'Hotel':                               
             case 'Entertainment':
                 if(expense.note) {
                     if(expense.note.indexOf('|') >= 0) {
@@ -53,15 +57,8 @@ class ExpenseTransformer {
                 }
                 break;             
             case 'uber':
-                if(expense.note) {
-                    if(expense.note.indexOf('|') >= 0) {
-                        console.log("uber expenseDate: ", expense.expenseDate,"category: ", expense.category, "note: ", expense.note);
-                    } else {
-                        expense.travelName = expense.note;
-                    }
-                    delete expense.note;
-                }
-                break;            
+                expense = this.genericParse(expense, 'travelName', this.parseUber);                
+                break;                         
             case 'ropa deportiva':
             case 'Clothes':
             case 'Shoes':
@@ -143,7 +140,10 @@ class ExpenseTransformer {
                         delete expense.note;
                     }                    
                 }
-                break;            
+                break;
+            case 'apps':
+                expense = this.genericParse(expense, 'appName', this.parseNoteApps);                
+                break;               
             /*case 6:
                 day = "Saturday";*/
         }
@@ -165,6 +165,15 @@ class ExpenseTransformer {
         return expense;
     }
 
+    static parseNoteApps(expense, details) {
+
+        if(details[0]) {//in what app was the money spent
+            expense.appName = details[0];
+        }       
+
+        return expense;
+    }
+
     static parseNoteTransporteEnViaje(expense, details) {
 
         if(details[0]) {//in what was the money spent
@@ -172,18 +181,22 @@ class ExpenseTransformer {
         }
 
         if(details[1]) {//currency
-            expense.currency = details[2];
+            expense.currency = details[1];
         }
 
         if(details[2]) {//cost in currency
-            expense.costInCurrency = details[3];
+            expense.costInCurrency = details[2];
         }
 
         if(details[3]) {//that day currency cost
-            expense.currencyInMexicanPesos = details[4];
+            expense.currencyInMexicanPesos = details[3];
         }
 
-        if(details[4]) {//event
+        if(details[4]) {//city
+            expense.city = details[4];
+        }
+
+        if(details[5]) {//event
             expense.travelName = details[5];
         }
 
@@ -213,8 +226,12 @@ class ExpenseTransformer {
             expense.currencyInMexicanPesos = details[4];
         }
 
-        if(details[5]) {//event
-            expense.travelName = details[5];
+        if(details[5]) {//city
+            expense.city = details[5];
+        }
+
+        if(details[6]) {//event
+            expense.travelName = details[6];
         }
 
         return expense;
@@ -338,8 +355,46 @@ class ExpenseTransformer {
             expense.currencyInMexicanPesos = details[4];
         }
 
-        if(details[5]) {//event
-            expense.travelName = details[5];
+        if(details[5]) {//city
+            expense.city = details[5];
+        }
+
+        if(details[6]) {//event
+            expense.travelName = details[6];
+        }
+
+        return expense;
+    }
+
+    static parseNoteComerEnViaje(expense, details) {
+
+        if(details[0]) {//what was the food eat
+            expense.foodItem = details[0];
+        }
+
+        if(details[1]) {//where was the food eat
+            expense.travelFoodPlace = details[1];
+        }
+
+        if(details[2]) {//currency
+            expense.currency = details[2];
+        }
+
+        if(details[3]) {//cost in currency
+            expense.costInCurrency = details[3];
+        }
+
+        if(details[4]) {//that day currency cost
+            expense.currencyInMexicanPesos = details[4];
+        }
+        
+
+        if(details[5]) {//city
+            expense.city = details[5];
+        }
+
+        if(details[6]) {//event
+            expense.travelName = details[6];
         }
 
         return expense;
@@ -375,7 +430,7 @@ class ExpenseTransformer {
             expense.travelName = details[4];
         }
 
-        if(details[5]) {//event
+        if(details[5]) {//city
             expense.city = details[5];
         }
 
@@ -402,6 +457,39 @@ class ExpenseTransformer {
 
         if(details[4]) {//that day currency cost
             expense.currencyInMexicanPesos = details[4];
+        }
+
+        if(details[5]) {//city
+            expense.city = details[5];
+        }
+
+        if(details[6]) {//event
+            expense.travelName = details[6];
+        }
+
+        return expense;
+    }
+
+    static parseNoteHotel(expense, details) {
+        
+        if(details[0]) {//where was the item bought
+            expense.store = details[0];
+        }
+
+        if(details[1]) {//currency
+            expense.currency = details[1];
+        }
+
+        if(details[2]) {//cost in currency
+            expense.costInCurrency = details[2];
+        }
+
+        if(details[3]) {//that day currency cost
+            expense.currencyInMexicanPesos = details[3];
+        }
+
+        if(details[4]) {//city
+            expense.city = details[4];
         }
 
         if(details[5]) {//event
@@ -440,6 +528,35 @@ class ExpenseTransformer {
         return expense;
     }
 
+    static parseNoteEnterntaimentEnViaje(expense, details) {
+
+        if(details[0]) {//what was the entertaiment pay
+            expense.withWho = details[0];
+        }        
+
+        if(details[1]) {//currency
+            expense.currency = details[1];
+        }
+
+        if(details[2]) {//cost in currency
+            expense.costInCurrency = details[2];
+        }
+
+        if(details[3]) {//that day currency cost
+            expense.currencyInMexicanPesos = details[3];
+        }
+
+        if(details[4]) {//city
+            expense.travelName = details[4];
+        }
+
+        if(details[5]) {//event
+            expense.travelName = details[5];
+        }
+
+        return expense;
+    }
+
     static parseNoteComprasDeMercado(expense, details) {
 
         if(details[0]) {//whith who
@@ -467,7 +584,49 @@ class ExpenseTransformer {
         }
 
         return expense;
-    }    
+    }
+    
+    static parseTravel(expense, details) {
+
+        if(details[0]) {//where was the item bought
+            expense.store = details[0];
+        }
+
+        if(details[1]) {//currency
+            expense.currency = details[1];
+        }
+
+        if(details[2]) {//cost in currency
+            expense.costInCurrency = details[2];
+        }
+
+        if(details[3]) {//that day currency cost
+            expense.city = details[3];
+        }
+
+        if(details[4]) {//city
+            expense.city = details[4];
+        }
+
+        if(details[5]) {//event
+            expense.travelName = details[5];
+        }
+
+        return expense;
+    }
+
+    static parseUber(expense, details) {
+
+        if(details[0]) {//city
+            expense.city = details[0];
+        }
+
+        if(details[1]) {//event
+            expense.travelName = details[1];
+        }
+
+        return expense;
+    }
 }
 
 module.exports = ExpenseTransformer;

@@ -33,7 +33,7 @@ const mapping = {
 //const travelCategories = ['Travel', 'Hotel', 'Comer en viaje', 'Transporte en viaje', 'uber', 'snacks', 'Ajedrez inscripciones'];
 //const travelCategories = ['Travel', 'Hotel', 'Comer en viaje', 'Transporte en viaje', 'snacks', 'Ajedrez inscripciones'];
 
-fs.readFile('/Users/giovanni/Downloads/speendingDocs/Transactions 01 Jul 2018 - 30 Sep 2018.csv', (err, data) => {	
+fs.readFile('/Users/giovanni/Downloads/speendingDocs/Transactions 01 Jul 2018 - 30 Nov 2018.csv', (err, data) => {	
 
 	if(err) {
 		console.error('failure', err);
