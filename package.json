@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/gcarreto/coinkeeper_elasticsearch_loader/issues"
   },
-  "homepage": "https://github.com/gcarreto/coinkeeper_elasticsearch_loader#readme"
+  "homepage": "https://github.com/gcarreto/coinkeeper_elasticsearch_loader#readme",
+  "dependencies": {
+    "elasticsearch": "^14.0.0"
+  }
 }
