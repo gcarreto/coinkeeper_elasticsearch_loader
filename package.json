@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/gcarreto/coinkeeper_elasticsearch_loader#readme",
   "dependencies": {
-    "elasticsearch": "^14.0.0"
+    "elasticsearch": "^15.3.1"
   }
 }

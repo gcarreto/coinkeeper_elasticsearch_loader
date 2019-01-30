@@ -16,19 +16,26 @@ class ExpenseTransformer {
                 expense = this.genericParse(expense, 'travelName', this.parseUber);        
                 break;
             case 'Comer en viaje':
-                expense = this.genericParse(expense, 'withWho', this.parseNoteComerEnViaje);        
+                expense = this.genericParse(expense, 'travelName', this.parseNoteComerEnViaje);
                 break;
             case 'Travel':
-            case 'Hotel':                               
-            case 'Entertainment':
+                expense = this.genericParse(expense, 'travelName', this.parseTravel);
+                break;
+            case 'Hotel':
+                expense = this.genericParse(expense, 'travelName', this.parseNoteHotel);
+                /*
                 if(expense.note) {
                     if(expense.note.indexOf('|') >= 0) {
-                        console.log("expenseDate: ", expense.expenseDate,"category: ", expense.category, "note: ", expense.note);                        
+                        console.log("expenseDate: ", expense.expenseDate,"category: ", expense.category, "note: ", expense.note);
                     } else {
                         expense.travelName = expense.note;
                         delete expense.note;
-                    }                    
+                    }
                 }
+                */
+                break;
+            case 'Entertainment':
+                expense = this.genericParse(expense, 'travelName', this.parseNoteEnterntaimentEnViaje);
                 break;
             case 'snacks':
                 expense = this.genericParse(expense, 'travelName', this.parseNoteSnacks);                
@@ -76,6 +83,7 @@ class ExpenseTransformer {
                     delete expense.note;
                 }
                 break;
+            case 'entrada externa por tarjeta platinum'://a este le falta analisis, algunas compras para otra persona tienen coyas
             case 'entrada externa por tarjeta travel':
                 expense.amountConverted *= -1; 
                 expense.accountOriginal = expense.account;
@@ -156,6 +164,7 @@ class ExpenseTransformer {
             if(expense.note.indexOf('|') >= 0) {
                 let noteDetails = expense.note.split('|');
                 //expense = this.parseNoteTransporteEnViaje(expense, noteDetails);
+                //console.log("si tienes una nota", expense.note, defaultProperty, noteDetails);
                 expense = parsingMethod(expense, noteDetails);
             } else {
                 expense[defaultProperty] = expense.note;                        
@@ -260,8 +269,8 @@ class ExpenseTransformer {
             expense.currencyInMexicanPesos = details[4];
         }
 
-        if(details[5]) {//event
-            expense.travelName = details[5];
+        if(details[5]) {//doctor
+            expense.doctor = details[5];
         }
 
         return expense;
@@ -434,6 +443,13 @@ class ExpenseTransformer {
             expense.city = details[5];
         }
 
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+            //console.log("se paso: ", subArray);
+
+        }
+        //console.log('parseNoteExternalTravel.length', details.length, details);
         return expense;
     }
 
@@ -501,6 +517,8 @@ class ExpenseTransformer {
 
     static parseNoteEnterntaimentEns(expense, details) {
 
+        //console.log("details: ", details);
+
         if(details[0]) {//whith who
             expense.withWho = details[0];
         }
@@ -531,7 +549,7 @@ class ExpenseTransformer {
     static parseNoteEnterntaimentEnViaje(expense, details) {
 
         if(details[0]) {//what was the entertaiment pay
-            expense.withWho = details[0];
+            expense.travelEntertaiment = details[0];
         }        
 
         if(details[1]) {//currency
@@ -547,7 +565,7 @@ class ExpenseTransformer {
         }
 
         if(details[4]) {//city
-            expense.travelName = details[4];
+            expense.city = details[4];
         }
 
         if(details[5]) {//event
@@ -608,7 +626,7 @@ class ExpenseTransformer {
             expense.city = details[4];
         }
 
-        if(details[5]) {//event
+        if(details[5]) {//event //default
             expense.travelName = details[5];
         }
 
