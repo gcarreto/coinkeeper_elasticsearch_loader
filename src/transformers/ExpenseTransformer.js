@@ -53,7 +53,20 @@ class ExpenseTransformer {
                 expense = this.genericParse(expense, 'receiver', this.parseNoteGifts);                
                 break;
             case 'compras de mercado':
-                expense = this.genericParse(expense, 'toWhom', this.parseNoteComprasDeMercado);                
+                //expense = this.genericParse(expense, 'mercado', this.parseNoteComprasDeMercado);
+                if(expense.note) {
+                    if(expense.note.indexOf('|') >= 0) {
+                        let noteDetails = expense.note.split('|');                        
+                        expense = this.parseNoteComprasDeMercado(expense, noteDetails);
+                    } else {
+                        if(expense.note == 'Cerillito') {
+                            expense.isCerillito = true;
+                        } else {
+                            expense.mercado = expense.note;
+                        }                        
+                    }
+                    delete expense.note;
+                }
                 break;
             case 'cine':
                 if(expense.note) {                    
@@ -205,7 +218,7 @@ class ExpenseTransformer {
             expense.city = details[4];
         }
 
-        if(details[5]) {//event
+        if(details[5]) {//event// default
             expense.travelName = details[5];
         }
 
@@ -220,8 +233,8 @@ class ExpenseTransformer {
         }
 
         if(details[1]) {//where was the snack eaten
-            expense.place = details[1];
-        }
+            expense.snackPlace = details[1]; //tentative to change this to place in order to match comer en viaje because I can eat
+        }//and grab a snack in the same place
 
         if(details[2]) {//currency
             expense.currency = details[2];
@@ -253,7 +266,7 @@ class ExpenseTransformer {
             expense.medicina = details[0];
         }
 
-        if(details[1]) {//where was the medicine eaten
+        if(details[1]) {//where was the medicine eaten // default
             expense.farmacia = details[1];
         }
 
@@ -269,8 +282,16 @@ class ExpenseTransformer {
             expense.currencyInMexicanPesos = details[4];
         }
 
-        if(details[5]) {//doctor
-            expense.doctor = details[5];
+        if(details[5]) {//city
+            expense.city = details[5];
+        }
+
+        if(details[6]) {//event
+            expense.travelName = details[6];
+        }
+
+        if(details[7]) {//doctor
+            expense.doctor = details[7];
         }
 
         return expense;
@@ -329,7 +350,8 @@ class ExpenseTransformer {
             expense.currencyInMexicanPesos = details[4];
         }
 
-        if(details[5]) {//to whom
+        if(details[5]) {//to whom// it is not working well when several persons are added
+            console.log('parseNoteGifts receiver: ', details[5]);
             expense.receiver = details[5];
         }
 
@@ -378,12 +400,13 @@ class ExpenseTransformer {
     static parseNoteComerEnViaje(expense, details) {
 
         if(details[0]) {//what was the food eat
-            expense.foodItem = details[0];
+            //expense.foodItem = details[0];
+            expense.food = details[0];
         }
 
         if(details[1]) {//where was the food eat
-            expense.travelFoodPlace = details[1];
-        }
+            expense.travelFoodPlace = details[1]; //tentative to change this to place in order to match snacks because I can eat
+        }// ant grab a snack in the same place
 
         if(details[2]) {//currency
             expense.currency = details[2];
@@ -456,7 +479,7 @@ class ExpenseTransformer {
     static parseNoteShopping(expense, details) {
 
         if(details[0]) {//what was bought
-            expense.item = details[0];
+            expense.shoppingItem = details[0];
         }
 
         if(details[1]) {//where was the item bought
@@ -489,8 +512,8 @@ class ExpenseTransformer {
     static parseNoteHotel(expense, details) {
         
         if(details[0]) {//where was the item bought
-            expense.store = details[0];
-        }
+            expense.store = details[0];//should this be place ? like snack (in travel) and comer en viaje ?
+        }//because I can eat, grab a snack and stay in the same place
 
         if(details[1]) {//currency
             expense.currency = details[1];
@@ -524,7 +547,7 @@ class ExpenseTransformer {
         }
 
         if(details[1]) {//where was the the entertaiment pay
-            expense.place = details[1];
+            expense.EnterntaimentPlace = details[1];
         }
 
         if(details[2]) {//currency
@@ -577,24 +600,24 @@ class ExpenseTransformer {
 
     static parseNoteComprasDeMercado(expense, details) {
 
-        if(details[0]) {//whith who
-            expense.toWhom = details[0];
+        if(details[0]) {//mercado
+            expense.mercado = details[0];
         }
 
-        if(details[1]) {//where was the the entertaiment pay
-            expense.place = details[1];
+        if(details[1]) {//currency
+            expense.currency = details[1];
         }
 
-        if(details[2]) {//currency
-            expense.currency = details[2];
+        if(details[2]) {//cost in currency
+            expense.costInCurrency = details[2];
         }
 
-        if(details[3]) {//cost in currency
-            expense.costInCurrency = details[3];
+        if(details[3]) {//that day currency cost
+            expense.currencyInMexicanPesos = details[3];
         }
 
-        if(details[4]) {//that day currency cost
-            expense.currencyInMexicanPesos = details[4];
+        if(details[4]) {//city
+            expense.city = details[4];
         }
 
         if(details[5]) {//event
