@@ -191,7 +191,16 @@ class ExpenseTransformer {
 
         if(details[0]) {//in what app was the money spent
             expense.appName = details[0];
-        }       
+        }
+        
+        if(details[1]) {//currency
+            expense.currency = details[1];
+        }
+
+        if(details[2]) {//cost in currency
+            expense.costInCurrency = details[2];
+        }
+        
 
         return expense;
     }
@@ -220,6 +229,13 @@ class ExpenseTransformer {
 
         if(details[5]) {//event// default
             expense.travelName = details[5];
+        }
+
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+            //console.log("se paso: ", subArray);
+
         }
 
         return expense;
@@ -322,6 +338,13 @@ class ExpenseTransformer {
 
         if(details[5]) {//event
             expense.foodEvent = details[5];
+        }
+
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+            //console.log("se paso: ", subArray);
+
         }
 
         return expense;
@@ -466,6 +489,8 @@ class ExpenseTransformer {
             expense.city = details[5];
         }
 
+        //travelEntertaiment: NFL tickets
+
         if(details.length > 6) {
             let subArray = details.slice(6,details.length);
             expense.extraNote = subArray.join('|');
@@ -566,10 +591,15 @@ class ExpenseTransformer {
             expense.travelName = details[5];
         }
 
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+        }
+
         return expense;
     }
 
-    static parseNoteEnterntaimentEnViaje(expense, details) {
+    static  parseNoteEnterntaimentEnViaje(expense, details) {
 
         if(details[0]) {//what was the entertaiment pay
             expense.travelEntertaiment = details[0];
@@ -593,6 +623,13 @@ class ExpenseTransformer {
 
         if(details[5]) {//event
             expense.travelName = details[5];
+        }
+        
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+            //console.log("se paso: ", subArray);
+
         }
 
         return expense;
@@ -624,6 +661,13 @@ class ExpenseTransformer {
             expense.travelName = details[5];
         }
 
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+            //console.log("se paso: ", subArray);
+
+        }
+
         return expense;
     }
     
@@ -651,6 +695,13 @@ class ExpenseTransformer {
 
         if(details[5]) {//event //default
             expense.travelName = details[5];
+        }
+
+        if(details.length > 6) {
+            let subArray = details.slice(6,details.length);
+            expense.extraNote = subArray.join('|');
+            //console.log("se paso: ", subArray);
+
         }
 
         return expense;
