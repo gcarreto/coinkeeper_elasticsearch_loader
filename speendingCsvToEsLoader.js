@@ -33,7 +33,7 @@ const mapping = {
 //const travelCategories = ['Travel', 'Hotel', 'Comer en viaje', 'Transporte en viaje', 'uber', 'snacks', 'Ajedrez inscripciones'];
 //const travelCategories = ['Travel', 'Hotel', 'Comer en viaje', 'Transporte en viaje', 'snacks', 'Ajedrez inscripciones'];
 
-fs.readFile('/Users/giovanni/Downloads/speendingDocs/Transactions 01 Jan 2017 - 08 Apr 2019.csv', (err, data) => {	
+fs.readFile('/Users/giovanni/Downloads/speendingDocs/Transactions 01 Oct 2016 - 19 Nov 2019.csv', (err, data) => {	
 
 	if(err) {
 		console.error('failure', err);
@@ -111,7 +111,7 @@ function indexData(rows, mapping, dateMapping, headersM) {
 			
 			if(recordObj.category != 'Transfer') {
 
-				if(amountConverted >= 0) {
+				if(amountConverted > 0) {
 					recordObj.type = 'Income';
 				} else {
 					recordObj.type = 'Expense';

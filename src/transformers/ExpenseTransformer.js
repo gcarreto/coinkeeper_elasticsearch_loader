@@ -52,16 +52,17 @@ class ExpenseTransformer {
             case 'Gifts':
                 expense = this.genericParse(expense, 'receiver', this.parseNoteGifts);                
                 break;
-            case 'compras de mercado':
+            case 'compras de mercado':            
                 //expense = this.genericParse(expense, 'mercado', this.parseNoteComprasDeMercado);
                 if(expense.note) {
+                    console.log(`expense.note /${expense.note}/`, expense.note.trim() === 'Cerillito');
                     if(expense.note.indexOf('|') >= 0) {
                         let noteDetails = expense.note.split('|');                        
                         expense = this.parseNoteComprasDeMercado(expense, noteDetails);
-                    } else {
-                        if(expense.note == 'Cerillito') {
+                    } else {                        
+                        if(expense.note.trim() === 'Cerillito') {
                             expense.isCerillito = true;
-                        } else {
+                        } else {                            
                             expense.mercado = expense.note;
                         }                        
                     }
@@ -96,9 +97,9 @@ class ExpenseTransformer {
                     delete expense.note;
                 }
                 break;
-            case 'entrada externa por tarjeta platinum'://a este le falta analisis, algunas compras para otra persona tienen coyas
             case 'entrada externa por tarjeta travel':
-                expense.amountConverted *= -1; 
+            case 'devolucion travel':
+                expense.amountConverted *= -1;
                 expense.accountOriginal = expense.account;
                 expense.account = 'travel pass';
                 if(expense.note) {
@@ -111,6 +112,21 @@ class ExpenseTransformer {
                     }                    
                 }
                 break;
+            case 'entrada externa por tarjeta platinum'://a este le falta analisis, algunas compras para otra persona tienen coyas
+            case 'devolucion platinum':    
+                    expense.amountConverted *= -1;
+                    expense.accountOriginal = expense.account;
+                    expense.account = 'Platinum';
+                    if(expense.note) {
+                        if(expense.note.indexOf('|') >= 0) {
+                            let noteDetails = expense.note.split('|');                        
+                            expense = this.parseNoteExternalTravel(expense, noteDetails);
+                            delete expense.note;
+                        } else {
+                            console.log("no esta considerado:", expense.note);
+                        }                    
+                    }
+                    break;
             case 'entrada externa por vales':
                 expense.amountConverted *= -1; 
                 expense.accountOriginal = expense.account;
@@ -164,9 +180,17 @@ class ExpenseTransformer {
                 break;
             case 'apps':
                 expense = this.genericParse(expense, 'appName', this.parseNoteApps);                
-                break;               
-            /*case 6:
-                day = "Saturday";*/
+                break;
+            case 'random':
+            case 'retorno premia':
+            case 'ajuste':
+                expense.amountConverted *= -1;
+                break;
+            case 'retorno ethereum':
+                expense.amountConverted *= -1;
+                expense.category = 'Ethereums'
+                expense.categoryOriginal = 'retorno ethereum'
+            //case 'retorno producto'://Clothes|dlls|43.48||Thanksgiving 2017|San Diego|Macy's
         }
 
         return expense;
@@ -489,10 +513,14 @@ class ExpenseTransformer {
             expense.city = details[5];
         }
 
+        if(details[6]) {//store
+            expense.store = details[6];
+        }
+
         //travelEntertaiment: NFL tickets
 
-        if(details.length > 6) {
-            let subArray = details.slice(6,details.length);
+        if(details.length > 7) {
+            let subArray = details.slice(7,details.length);
             expense.extraNote = subArray.join('|');
             //console.log("se paso: ", subArray);
 
@@ -572,6 +600,8 @@ class ExpenseTransformer {
         }
 
         if(details[1]) {//where was the the entertaiment pay
+            
+            //expense.EntertaimentPlace = details[1];
             expense.EnterntaimentPlace = details[1];
         }
 
@@ -722,3 +752,14 @@ class ExpenseTransformer {
 }
 
 module.exports = ExpenseTransformer;
+
+//category.keyword: "devolucion platinum"
+//category:devolucion platinum //aun no se que hacer con esta categoria
+//deberia regresarse a la cuenta platinum para que cuente como menos 
+//deberia cuando aplica regresarse a comisiones al banco y cuando no al gasto que se hizo
+
+
+//category.keyword: "devolucion travel"
+//category:devolucion platinum //aun no se que hacer con esta categoria
+//deberia regresarse a la cuenta platinum para que cuente como menos 
+//deberia cuando aplica regresarse a comisiones al banco y cuando no al gasto que se hizo
