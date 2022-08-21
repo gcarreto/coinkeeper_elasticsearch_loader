@@ -33,7 +33,7 @@ const mapping = {
 //const travelCategories = ['Travel', 'Hotel', 'Comer en viaje', 'Transporte en viaje', 'uber', 'snacks', 'Ajedrez inscripciones'];
 //const travelCategories = ['Travel', 'Hotel', 'Comer en viaje', 'Transporte en viaje', 'snacks', 'Ajedrez inscripciones'];
 
-fs.readFile('/Users/giovanni/Downloads/speendingDocs/Transactions 01 Oct 2016 - 19 Nov 2019.csv', (err, data) => {	
+fs.readFile('/Users/giovanni/Downloads/speendingDocs/Transactions 17 May 2012 - 31 Mar 2022.csv', (err, data) => {	
 
 	if(err) {
 		console.error('failure', err);
@@ -105,7 +105,7 @@ function indexData(rows, mapping, dateMapping, headersM) {
 					var dat = new Date(value);
 					recordObj[key] = dat;
 				} 			
-			});
+			});			
 
 			amountConverted = parseFloat(recordObj.amountConverted);
 			
@@ -119,7 +119,7 @@ function indexData(rows, mapping, dateMapping, headersM) {
 				}
 
 				//console.log(recordObj.type, recordObj.amountConverted);
-			}				
+			}
 
 			/********* viajes *********/
 			//categories:

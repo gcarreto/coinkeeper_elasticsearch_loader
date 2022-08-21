@@ -78,6 +78,7 @@ class ExpenseTransformer {
                 }
                 break;             
             case 'uber':
+            case 'Didi':
                 expense = this.genericParse(expense, 'travelName', this.parseUber);                
                 break;                         
             case 'ropa deportiva':
@@ -374,7 +375,7 @@ class ExpenseTransformer {
         return expense;
     }
 
-    //what was the gift|where was the gift bought|currency|cost in currency|that day currency cost|whom|gift event
+    //what was the gift|where was the gift bough\
     static parseNoteGifts(expense, details) {
 
         if(details[0]) {//what was the gift
@@ -404,6 +405,10 @@ class ExpenseTransformer {
 
         if(details[6]) {//event
             expense.travelName = details[6];
+        }
+
+        if(details[7]) {//city
+            expense.city = details[7];
         }
 
         return expense;
@@ -474,6 +479,10 @@ class ExpenseTransformer {
 
         if(details[6]) {//event
             expense.travelName = details[6];
+        }
+
+        if(details[7]) {//how many people
+            expense.peopleQty = details[6];
         }
 
         return expense;
@@ -629,7 +638,7 @@ class ExpenseTransformer {
         return expense;
     }
 
-    static  parseNoteEnterntaimentEnViaje(expense, details) {
+    static parseNoteEnterntaimentEnViaje(expense, details) {
 
         if(details[0]) {//what was the entertaiment pay
             expense.travelEntertaiment = details[0];
